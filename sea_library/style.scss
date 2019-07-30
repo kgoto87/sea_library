@@ -1,0 +1,34 @@
+body > section {
+    overflow-x: hidden;
+}
+
+#intro {
+    counter-reset: steps;
+    h4 {
+        &::after {
+            counter-increment: steps;
+            content: counter(steps);
+        }
+    }
+    code {
+        span {
+            color: cadetblue;
+        }
+    }
+}
+
+div.sample {
+    background-color: aquamarine;
+    margin-bottom: 5%;
+    &:nth-of-type(2n) {
+        background-color: antiquewhite;
+    }
+    &:nth-of-type(3n) {
+        background-color: lavender;
+    }
+    
+    p {
+        padding: 20px;
+        text-align: center;
+    }
+}
