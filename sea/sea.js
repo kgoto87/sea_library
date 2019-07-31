@@ -15,6 +15,13 @@
         window.addEventListener('scroll', function(){
             scrollChecker(params['elements'], params['mode'], params['position']);
         });
+        
+        window.addEventListener('resize', function(){
+            reestTranstitionEvents(params['elements']);
+            params['elements'] = document.querySelectorAll('.sea_scroll');
+            setTransitionEvents(params['elements']);
+            setInitialPositions(params['elements']);
+        });
     });
 
     /**
@@ -27,7 +34,7 @@
             cssPath             = jsPath.replace('sea.js', 'sea.css'),
             cssLinkTag          = document.createElement('link'),
             params              = getParams(jsPath),
-            seaScrollEls   = document.querySelectorAll('.sea_scroll'),
+            seaScrollEls        = document.querySelectorAll('.sea_scroll'),
             seaHoverElements    = document.querySelectorAll('.sea_hover');
 
         // Put Sea's CSS link tag below the script tag 
@@ -53,13 +60,25 @@
     **/
     function setTransitionEvents(elements) {
         elements.forEach(function(element){
-            element.addEventListener('transitionstart', function(){
-                this.setAttribute('data-sea-transition-state', 'started');
-            });
-            element.addEventListener('transitionend', function(){
-                this.setAttribute('data-sea-transition-state', 'ended');
-            });
+            element.addEventListener('transitionstart', setTransitionStarted, true);
+            element.addEventListener('transitionend', setTransitionEnded, true);
         });
+    }
+    
+    function reestTranstitionEvents(elements) {
+        elements.forEach(function(element){
+            console.log('reset');
+            element.removeEventListener('transitionstart', setTransitionStarted, true);
+            element.removeEventListener('transitionend', setTransitionEnded, true);
+        });
+    }
+    
+    function setTransitionStarted() {
+        this.setAttribute('data-sea-transition-state', 'started');
+    }
+    
+    function setTransitionEnded() {
+        this.setAttribute('data-sea-transition-state', 'ended');
     }
     
     /**
@@ -99,7 +118,12 @@
     * @param string mode
     * @param int position
     **/
-    function scrollChecker(seaScrollEls, mode = 'loop', position = 25) {
+    function scrollChecker(seaScrollEls, mode, position) {
+        
+        // set default values as IE doesn't support it
+        if (mode == undefined) mode = 'loop';
+        if (position == undefined) position = '25';
+        
         var isBottomOfPage      = (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight,
             isModeInit          = (mode === modes['init']),
             isModeOnce          = (mode === modes['once']),
