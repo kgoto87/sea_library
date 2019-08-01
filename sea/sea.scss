@@ -46,6 +46,10 @@ $transforms:(
     (spin_left,     rotate,     360deg,     0,      360deg),
 );
 
+body {
+    height: auto;
+}
+
 .sea_scroll {
     
     transition: all $transitionDuration;
@@ -76,7 +80,6 @@ $transforms:(
 
             // combinations
             $combinations: remove($combinations, $transform);
-            @debug $combinations;
             @each $combination in $combinations {
                 @if nth($transform, 2) != nth($combination, 2) {
                     &.sea_#{nth($combination, 1)} {
