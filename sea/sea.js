@@ -67,7 +67,6 @@
     
     function reestTranstitionEvents(elements) {
         elements.forEach(function(element){
-            console.log('reset');
             element.removeEventListener('transitionstart', setTransitionStarted, true);
             element.removeEventListener('transitionend', setTransitionEnded, true);
         });
